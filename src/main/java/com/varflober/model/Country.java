@@ -18,7 +18,6 @@ public class Country {
 
 	public Country(String name, String capital, String region, String subregion, String alpha2Code,
 			List<String> languages) {
-		super();
 		this.name = name;
 		this.capital = capital;
 		this.region = region;

@@ -29,16 +29,11 @@ public class CountryService {
 		try {
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 			countries = Arrays.asList(mapper.readValue(response.body(), Country[].class));
-			System.out.println("Retrieved: " + Arrays.toString(countries.toArray()));
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}		
 		return countries;
 	}
-	
-	public String getCountryFlag(String countryCode) {
-		return "https://www.countryflags.io/" + countryCode + "/shiny/64.png";
-	}
-
 }

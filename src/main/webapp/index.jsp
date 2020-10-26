@@ -8,6 +8,7 @@
 	<title>Countries of the world</title>
 	<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	<script src="js/main.js"></script> 
 </head>
 <body>
@@ -20,7 +21,19 @@
 				<div class="panel-body scrollable">
 					<ul>
 						<c:forEach var="country" items="${countries}">
-							<span onclick="clic(${country})">${country.name}</span><br>
+						 	<c:set var="name_selected" scope="session" value = "${country.name}"/>
+						 	<c:set var="capital_selected" scope="session" value = "${country.capital}"/>
+						 	<c:set var="region_selected" scope="session" value = "${country.region}"/>
+						 	<c:set var="subregion_selected" scope="session" value = "${country.subregion}"/>
+						 	<c:set var="alpha2Code_selected" scope="session" value = "${country.alpha2Code}"/>
+						 	<c:set var="languages_selected" scope="session" value = "${country.languages}"/>
+							<s:span onclick="clic('${name_selected}', 
+												  '${capital_selected}', 
+												  '${region_selected}',
+												  '${subregion_selected}',
+												  '${alpha2Code_selected}',
+												  '${languages_selected}'
+												  ) ">${country.name}</s:span><br>
 						</c:forEach>
 					</ul>
 				</div>
@@ -29,22 +42,23 @@
 
 		<div class="rightpane">
 			<div class="panel-heading">History</div>
-			<div class="panel-body scrollable">
+			<div id="countryCounterElement" class="panel-body scrollable">
 				Selected countries
+				 <dl id="dlCountryCounter">
+				</dl> 
 			</div>
 		</div>
 
 		<div class="middlepane">
 			<div class="panel-heading">Selection</div>
 				<div class="panel-body">
-					<!-- 			{flagUrl} -->
-					<img src="https://www.countryflags.io/be/shiny/64.png">
+					<img id="flagElement" src="">
 					
-					<span id="countryName"> {country.name} </span><br>
-					<span id="countryCapital"> {country.capital} </span><br>
-					<span id="countryRegion"> {country.region} </span><br>
-					<span id="countrySubregion"> {country.subregion} </span><br>
-					<span id="countryLangs"> {country.languages} </span><br> <!--it's an array-->
+					<span>Name: </span><span id="countryName"> </span><br>
+					<span>Capital City: </span><span id="countryCapital"> </span><br>
+					<span>Region: </span><span id="countryRegion"> </span><br>
+					<span>Sub-Region: </span><span id="countrySubregion">  </span><br>
+					<span>Languages: </span><span id="countryLangs"> </span><br> <!--it's an array-->
 				</div>
 		</div>
 	</div>
