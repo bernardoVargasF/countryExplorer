@@ -1,3 +1,4 @@
+
 function clic(name, capital, region, subregion, alpha2Code, languages) {
 	document.getElementById("countryName").innerHTML = name;
 	document.getElementById("countryCapital").innerHTML = capital;
@@ -7,7 +8,7 @@ function clic(name, capital, region, subregion, alpha2Code, languages) {
 
 	getCountryFlag(alpha2Code);
 
-	countryCounter(name);
+	countryCounter(name, capital, region, subregion, alpha2Code, languages);
 }
 
 function getCountryFlag(alpha2Code) {
@@ -16,62 +17,53 @@ function getCountryFlag(alpha2Code) {
 	flag.src = "https://www.countryflags.io/" + alpha2Code + "/shiny/64.png";
 }
 
-function countryCounter(countryName) {
-
+function countryCounter(countryName, capital, region, subregion, alpha2Code, languages) {
+	
 	selector = `#dlCountryCounter :contains('${countryName}')`
 	selectedList = $(selector);
 
-	if (selectedList.length) {			//Country previously selected
-		var countryElement = document.getElementById(countryName + "List");
-		if (countryElement.getElementsByTagName('DD').length > 0) {
-			console.log("Tiene hijo");
-			var counter = document.getElementById(countryName + "Counter");
-			var count = counter.innerHTML;
-			count++;
-			counter.innerHTML = count;
-		} else {
-			console.log("No tiene hijo");
-			var countryCount = document.createElement("DD");
-			countryCount.id = countryName + "Counter";
-			countryCount.innerHTML = 2;
-			countryElement.appendChild(countryCount);
+
+	if (!selectedList.length) {			//New country selected
+		var countryDiv = document.createElement("DIV");
+		countryDiv.id = countryName + "CounterDiv";
+		
+		countryDiv.onclick = function() {
+			clic(countryName, capital, region, subregion, alpha2Code, languages);
+			getCountryFlag(alpha2Code);
 		}
-	} else {							//New country selected
+		
+		
 		var countryElement = document.createElement("DT");
 		countryElement.id = countryName + "List";
 		countryElement.innerHTML = countryName;
-		var countryContainer = document.getElementById("dlCountryCounter");
-		countryContainer.appendChild(countryElement);
-	}
+		var countryCounter = document.createElement("DD");
+		countryCounter.id = countryName + "Counter";
+		countryCounter.value = 1;
+		countryCounter.innerHTML = "";
+		countryDiv.appendChild(countryElement);
+		countryDiv.appendChild(countryCounter);
 
-	orderDL(document.getElementById("dlCountryCounter"));
+		var dlCountryCounter = document.getElementById("dlCountryCounter");
+		dlCountryCounter.appendChild(countryDiv);
+
+		sortCountries(dlCountryCounter);
+	} else {							//Country previously selected
+		var countryCounter = document.getElementById(countryName + "Counter");
+		var counter = countryCounter.value;
+		counter++;
+		countryCounter.innerHTML = counter;
+		countryCounter.value = counter;
+	}
 }
 
-function orderDL(dl) {
-	if (typeof dl == "string") {
-		dl = document.getElementById(dl);
-		
-	}
+// Code based on: http://jsfiddle.net/MabhY/
+function sortCountries(dl) {
+	var lis = dl.querySelectorAll("DIV");
 
-	// Get the list items and setup an array for sorting
-	var lis = dl.getElementsByTagName("DT");
-	var lisCount = dl.getElementsByTagName("DD")
-	var vals = [];
-	var valsCount = [];
+	lis = Array.prototype.slice.call(lis).sort(function(a, b) {
+		return a.textContent.toLowerCase().localeCompare(b.textContent.toLowerCase());
+	}).forEach(function(e) {
+		dl.appendChild(e);
+	});
 
-	// Populate the array
-	for (var i = 0, l = lis.length; i < l; i++) {
-		vals.push(lis[i].innerHTML);
-		valsCount.push(lisCount[i].innerHTML);
-	}
-
-	// Sort it
-	vals.sort();
-	valsCount.sort();
-
-	// Change the list on the page
-	for (var i = 0, l = lis.length; i < l; i++) {
-		lis[i].innerHTML = vals[i];
-		lisCount[i].innerHTML = valsCount[i];		
-	}
 }
